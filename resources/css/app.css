@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-size: 14px;
+}
+
+:root {
+    --primary-50: 253 230 230;
+    --primary-100: 250 207 207;
+    --primary-200: 244 169 169;
+    --primary-300: 238 125 125;
+    --primary-400: 232 84 84;
+    --primary-500: 198 16 16;
+    --primary-600: 160 12 12;
+    --primary-700: 122 9 9;
+    --primary-800: 90 7 7;
+    --primary-900: 67 5 5;
+    --primary-950: 35 2 2;
+    --surface-0: 255 255 255;
+    --surface-50: 249 250 251;
+    --surface-100: 243 244 246;
+    --surface-200: 229 231 235;
+    --surface-300: 209 213 219;
+    --surface-400: 156 163 175;
+    --surface-500: 107 114 128;
+    --surface-600: 75 85 99;
+    --surface-700: 55 65 81;
+    --surface-800: 31 41 55;
+    --surface-900: 17 24 39;
+    --surface-950: 8 8 8;
+
+    --primary: var(--primary-500);
+    --primary-inverse: var(--surface-0);
+    --primary-hover: var(--primary-600);
+    --primary-active-color: var(--primary-600);
+
+    --primary-highlight-opacity: 0.1;
+    --primary-highlight-inverse: var(--primary-700);
+    --primary-highlight-hover-opacity: 0.2;
+}
+.dark {
+    --primary: var(--primary-400);
+    --primary-inverse: var(--surface-900);
+    --primary-hover: var(--primary-300);
+    --primary-active-color: var(--primary-300);
+
+    --primary-highlight-opacity: 0.2;
+    --primary-highlight-inverse: var(--surface-0);
+    --primary-highlight-hover-opacity: 0.3;
+}
+
+.customized-primary {
+    &:not(.dark) {
+        --primary: var(--primary-950);
+        --primary-inverse: var(--surface-0);
+        --primary-hover: var(--primary-800);
+        --primary-active-color: var(--primary-900);
+
+        --primary-highlight-opacity: 1;
+        --primary-highlight-inverse: var(--surface-0);
+        --primary-highlight-hover-opacity: 0.8;
+    }
+    &.dark {
+        --primary: var(--primary-50);
+        --primary-inverse: var(--surface-950);
+        --primary-hover: var(--primary-100);
+        --primary-active-color: var(--primary-100);
+
+        --primary-highlight-opacity: 0.1;
+        --primary-highlight-inverse: var(--surface-0);
+        --primary-highlight-hover-opacity: 0.2;
+    }
+}
