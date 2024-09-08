@@ -16,9 +16,7 @@
                         <InputText type="text" v-model="form.first_name" />
                     </div>
                     <div class="flex flex-col gap-2">
-                        <div class="font-medium">
-                            Nama Belakang <span class="text-red-600">*</span>
-                        </div>
+                        <div class="font-medium">Nama Belakang</div>
                         <InputText type="text" v-model="form.last_name" />
                     </div>
                     <div class="flex flex-col gap-2">
@@ -35,13 +33,8 @@
                         <InputText type="text" v-model="form.phone" />
                     </div>
                     <div class="flex flex-col gap-2">
-                        <div class="flex items-center gap-2">
-                            <div class="font-medium">
-                                Akses <span class="text-red-600">*</span>
-                            </div>
-                            <button class="text-gray-600 hover:text-black">
-                                <i class="pi pi-info-circle"></i>
-                            </button>
+                        <div class="font-medium">
+                            Akses <span class="text-red-600">*</span>
                         </div>
                         <Dropdown
                             v-model="form.role_id"
@@ -96,6 +89,7 @@ const form = useForm({
     email: "",
     phone: "",
     role_id: "",
+    group_id: "",
 });
 
 function cancel() {

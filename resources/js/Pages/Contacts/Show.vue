@@ -114,20 +114,20 @@
 
                 <div
                     v-if="selectedMenu === 'interaction'"
-                    class="space-y-6 p-8"
+                    class="space-y-6 px-8 py-2"
                 >
                     <div v-if="interactions?.length > 0" class="divide-y">
                         <div
                             v-for="interaction in interactions"
-                            class="space-y-3"
+                            class="py-6 space-y-3"
                         >
                             <div>
                                 <span class="font-medium">
-                                    {{ interaction.user.full_name }}
+                                    {{ interaction.user?.full_name }}
                                 </span>
                                 melakukan interaksi dengan
                                 <span class="font-medium">
-                                    {{ interactions.contact.full_name }}
+                                    {{ interaction.contact.full_name }}
                                 </span>
                             </div>
                             <div
@@ -150,23 +150,24 @@
                                 {{ interaction.notes }}
                             </div>
                             <div class="text-sm text-gray-600">
-                                {{ interaction.created_at }}
+                                {{ interaction.created_at.date }}
+                                {{ interaction.created_at.time }}
                             </div>
                         </div>
                     </div>
-                    <div v-else class="text-gray-600">Belum ada interaksi</div>
+                    <div v-else class="py-6 text-gray-600">
+                        Belum ada interaksi
+                    </div>
                 </div>
             </div>
 
-            <div
-                v-if="selectedMenu === 'biodata'"
-                class="border rounded-xl bg-white p-8 space-y-2"
-            >
+            <div class="border rounded-xl bg-white p-8 space-y-2">
                 <div class="flex gap-10">
                     <div class="w-36">Dibuat</div>
                     <div>:</div>
                     <div>
-                        {{ contact.created_at.date }} oleh
+                        {{ contact.created_at.date }}
+                        {{ contact.created_at.time }} oleh
                         {{ contact.creator.full_name }}
                     </div>
                 </div>
@@ -174,7 +175,8 @@
                     <div class="w-36">Diperbaharui</div>
                     <div>:</div>
                     <div v-if="contact.updater">
-                        {{ contact.created_at.date }} oleh
+                        {{ contact.updated_at.date }}
+                        {{ contact.updated_at.time }} oleh
                         {{ contact.updater.full_name ?? "-" }}
                     </div>
                     <div v-else>-</div>
@@ -208,7 +210,9 @@ const props = defineProps(["contact", "interactions"]);
 
 const visible = ref(false);
 
-const Interact = defineAsyncComponent(() => import("./Interact.vue"));
+const Interact = defineAsyncComponent(() =>
+    import("../Interaction/Create.vue")
+);
 
 function statusLabel(status) {
     switch (status) {

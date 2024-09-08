@@ -21,7 +21,7 @@ class Contact extends Model
         'polling_station_id',
         'email',
         'phone',
-        'employment',
+        'employment_id',
         'is_volunteer',
         'is_witness',
         'is_deceased',

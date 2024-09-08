@@ -16,7 +16,9 @@ class GroupResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'model' => 'App\Models\Group',
             'name' => $this->name,
+            'label' => $this->name,
             'users' => UserResource::collection($this->whenLoaded('users')),
             'users_count' => $this->users_count
         ];

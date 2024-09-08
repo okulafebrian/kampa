@@ -3,7 +3,13 @@
 
     <AuthenticatedLayout>
         <template #header>
-            <Header />
+            <Header>
+                <SplitButton
+                    label="Tambah Rumah"
+                    @click="create"
+                    :model="menus"
+                />
+            </Header>
         </template>
 
         <div class="p-24 pt-0 pb-16 space-y-6">
@@ -72,6 +78,9 @@
                         header="Nomor"
                         field="number"
                         style="min-width: 10rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
                         <template #body="{ data }">
@@ -82,48 +91,83 @@
                                 {{ data.number }}
                             </Link>
                         </template>
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis no. rumah"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="street.name"
                         header="Jalan"
                         style="min-width: 20rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis nama jalan"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="neighborhood_rt"
                         header="RT"
                         style="min-width: 8rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis nama rt"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="neighborhood_rw"
                         header="RW"
                         style="min-width: 8rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis nama rw"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="street.village.name"
                         header="Kelurahan"
                         style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
-                        <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown
+                        <template #filter="{ filterModel }">
+                            <InputText
                                 v-model="filterModel.value"
-                                @change="filterCallback()"
-                                :options="genders"
-                                optionLabel="name"
-                                optionValue="value"
-                                class="p-column-filter"
-                                style="min-width: 10rem"
-                                :showClear="true"
+                                type="text"
+                                placeholder="Tulis nama kelurahan"
                             />
                         </template>
                     </Column>
@@ -132,18 +176,16 @@
                         field="street.district.name"
                         header="Kecamatan"
                         style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
-                        <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown
+                        <template #filter="{ filterModel }">
+                            <InputText
                                 v-model="filterModel.value"
-                                @change="filterCallback()"
-                                :options="genders"
-                                optionLabel="name"
-                                optionValue="value"
-                                class="p-column-filter"
-                                style="min-width: 10rem"
-                                :showClear="true"
+                                type="text"
+                                placeholder="Tulis nama kecamatan"
                             />
                         </template>
                     </Column>
@@ -152,18 +194,16 @@
                         field="street.regency.name"
                         header="Kabupaten/Kota"
                         style="min-width: 16rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
-                        <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown
+                        <template #filter="{ filterModel }">
+                            <InputText
                                 v-model="filterModel.value"
-                                @change="filterCallback()"
-                                :options="genders"
-                                optionLabel="name"
-                                optionValue="value"
-                                class="p-column-filter"
-                                style="min-width: 10rem"
-                                :showClear="true"
+                                type="text"
+                                placeholder="Tulis nama kabupaten/kota"
                             />
                         </template>
                     </Column>
@@ -172,16 +212,36 @@
                         field="unit"
                         header="Unit"
                         style="min-width: 10rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis unit rumah"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="name"
                         header="Nama"
                         style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis nama rumah"
+                            />
+                        </template>
                     </Column>
                 </DataTable>
             </div>
@@ -213,6 +273,8 @@ import { useConfirm } from "primevue/useconfirm";
 import Dropdown from "primevue/dropdown";
 import Dialog from "primevue/dialog";
 import Form from "../WalkLists/Form.vue";
+import SplitButton from "primevue/splitbutton";
+import { router, useForm } from "@inertiajs/vue3";
 
 const props = defineProps(["houses"]);
 
@@ -224,59 +286,41 @@ function initFilters() {
     filters.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         number: {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         "street.name": {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         neighborhood_rt: {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         neighborhood_rw: {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         "street.village.name": {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         "street.district.name": {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
 
         "street.regency.name": {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         unit: {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         name: {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
         },
     };
 }
@@ -285,6 +329,10 @@ initFilters();
 
 function clearFilter() {
     initFilters();
+}
+
+function create() {
+    router.get(route("houses.create"));
 }
 
 function addToList() {
@@ -298,7 +346,7 @@ function remove() {
         message:
             "Apakah Anda yakin ingin menghapus " +
             selectedHouses.value.length +
-            " kontak?",
+            " rumah?",
         header: "Konfirmasi",
         rejectClass:
             "border-0 bg-transparent text-slate-900 hover:bg-surface-200 focus:ring-0",
@@ -316,6 +364,12 @@ function remove() {
         reject: () => {},
     });
 }
+
+const menus = [
+    {
+        label: "Tambah sekaligus",
+    },
+];
 </script>
 
 <style lang="scss" scoped></style>

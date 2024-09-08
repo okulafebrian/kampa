@@ -21,7 +21,7 @@ class InteractionResource extends JsonResource
             'notes' => $this->notes,
             'user' => UserResource::make($this->user),
             'contact' => ContactResource::make($this->contact),
-            'created_at' => $this->created_at->translatedFormat('d M Y')
+            'created_at' => DateTimeResource::make($this->created_at),
         ];
     }
 }

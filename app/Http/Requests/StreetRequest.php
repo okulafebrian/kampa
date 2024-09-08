@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HouseRequest extends FormRequest
+class StreetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +26,7 @@ class HouseRequest extends FormRequest
             'regency_id' => 'required',
             'district_id' => 'required',
             'village_id' => 'required',
-            'street_id' => 'required',
-            'number' => 'required',
-            'name' => 'nullable',
-            'unit' => 'nullable',
+            'name' => 'required',
         ];
     }
 }

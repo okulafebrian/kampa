@@ -85,54 +85,15 @@
                     </div>
                     <div v-else class="text-gray-600">Belum ada kontak</div>
                 </div>
-
-                <div
-                    v-if="selectedMenu === 'interaction'"
-                    class="space-y-6 p-8"
-                >
-                    <div v-if="interactions?.length > 0" class="divide-y">
-                        <div
-                            v-for="interaction in interactions"
-                            class="space-y-3"
-                        >
-                            <div>
-                                <span class="font-medium">
-                                    {{ interaction.user.full_name }}
-                                </span>
-                                melakukan interaksi
-                            </div>
-                            <div
-                                :class="[
-                                    'border-s-4 px-4 font-medium',
-                                    statusColor(interaction.status),
-                                ]"
-                            >
-                                {{ statusLabel(interaction.status) }}
-                            </div>
-                            <div
-                                v-if="interaction.notes"
-                                class="w-fit bg-slate-100 px-3 py-2 rounded-lg"
-                            >
-                                {{ interaction.notes }}
-                            </div>
-                            <div class="text-sm text-gray-600">
-                                {{ interaction.created_at }}
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else class="text-gray-600">Belum ada interaksi</div>
-                </div>
             </div>
 
-            <div
-                v-if="selectedMenu === 'house'"
-                class="border rounded-xl bg-white p-8 space-y-2"
-            >
+            <div class="border rounded-xl bg-white p-8 space-y-2">
                 <div class="flex gap-10">
                     <div class="w-36">Dibuat</div>
                     <div>:</div>
                     <div>
-                        {{ house.created_at.date }} oleh
+                        {{ house.created_at.date }}
+                        {{ house.created_at.time }} oleh
                         {{ house.creator.full_name }}
                     </div>
                 </div>
@@ -140,7 +101,8 @@
                     <div class="w-36">Diperbaharui</div>
                     <div>:</div>
                     <div v-if="house.updater">
-                        {{ house.created_at.date }} oleh
+                        {{ house.updated_at.date }}
+                        {{ house.updated_at.time }} oleh
                         {{ house.updater.full_name ?? "-" }}
                     </div>
                     <div v-else>-</div>
@@ -155,7 +117,7 @@
         position="right"
         class="w-[35rem]"
     >
-        <AddContact @close="visible = false" />
+        <AddContact />
     </Sidebar>
 </template>
 
@@ -169,7 +131,7 @@ import TabMenu from "primevue/tabmenu";
 import { useConfirm } from "primevue/useconfirm";
 import { defineAsyncComponent, ref } from "vue";
 
-const props = defineProps(["house", "contacts", "interactions"]);
+const props = defineProps(["house", "contacts"]);
 
 const visible = ref(false);
 
@@ -189,13 +151,6 @@ const menus = ref([
         command: () => {
             selectedMenu.value = "contact";
             router.reload({ only: ["contacts"] });
-        },
-    },
-    {
-        label: "Interaksi Terakhir",
-        command: () => {
-            selectedMenu.value = "interaction";
-            router.reload({ only: ["interactions"] });
         },
     },
 ]);

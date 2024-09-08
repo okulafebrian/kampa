@@ -43,7 +43,7 @@
                         <Dropdown
                             v-model="form.polling_station_id"
                             :options="pollingStations"
-                            optionLabel="id"
+                            optionLabel="name"
                             optionValue="id"
                         />
                     </div>
@@ -110,6 +110,7 @@ import SelectButton from "primevue/selectbutton";
 const props = defineProps(["contact", "employments", "pollingStations"]);
 
 const form = useForm({
+    house_id: props.contact.house.id,
     first_name: props.contact.first_name,
     last_name: props.contact.last_name,
     gender: props.contact.gender,
@@ -150,7 +151,7 @@ function cancel() {
 }
 
 function submit() {
-    router.put(route("contacts.update", props.contact));
+    form.put(route("contacts.update", props.contact));
 }
 </script>
 

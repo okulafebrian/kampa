@@ -17,13 +17,12 @@
                         >
                             Dasbor
                         </NavLink>
-                        <NavButton
+                        <NavLink
                             :href="route('statistic')"
                             :active="route().current('statistic')"
                         >
                             Statistik
-                        </NavButton>
-                        <Menu ref="item" :model="items" :popup="true" />
+                        </NavLink>
                         <NavLink
                             v-if="
                                 $page.props.auth.user.role.code === 'owner' ||
@@ -71,13 +70,22 @@
                 <button @click="toggleMenu" class="p-1">
                     <Avatar
                         :label="initials"
-                        size="large"
                         shape="circle"
-                        class="text-primary-500 font-medium"
+                        class="!w-11 !h-11 text-primary-500 font-medium"
                         style="background-color: rgb(253, 230, 230)"
                     />
                 </button>
-                <Menu ref="menu" :model="menus" :popup="true" />
+                <Menu ref="menu" :model="menus" :popup="true">
+                    <template #item="{ item }">
+                        <Link
+                            :href="route(item.route)"
+                            :method="item.route === 'logout' ? 'POST' : 'GET'"
+                            class="block px-3 py-2"
+                        >
+                            {{ item.label }}
+                        </Link>
+                    </template>
+                </Menu>
             </div>
         </div>
     </nav>
@@ -85,27 +93,22 @@
 
 <script setup>
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import { router, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import NavLink from "@/Components/NavLink.vue";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
-import NavButton from "../NavButton.vue";
 
 const menu = ref();
 const menus = ref([
     {
         label: "Profil",
-        command: () => {
-            router.get(route("profile.show"));
-        },
+        route: "profile.show",
     },
     {
         label: "Keluar",
-        command: () => {
-            router.post("logout");
-        },
+        route: "logout",
     },
 ]);
 

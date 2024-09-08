@@ -16,6 +16,13 @@ onMounted(() => {
             detail: usePage().props.flash?.success,
             life: 3000,
         });
+    } else if (usePage().props.flash.failed) {
+        toast.add({
+            severity: "error",
+            summary: "Gagal",
+            detail: usePage().props.flash?.failed,
+            life: 3000,
+        });
     }
 });
 </script>

@@ -19,7 +19,12 @@
                     currentPageReportTemplate="Menampilkan {first} - {last} dari {totalRecords}"
                     :rows="10"
                     :rowsPerPageOptions="[10, 20, 30, 40, 50]"
-                    :globalFilterFields="['full_name']"
+                    :globalFilterFields="[
+                        'full_name',
+                        'house.address',
+                        'email',
+                        'phone',
+                    ]"
                     scrollable
                     removableSort
                 >
@@ -73,6 +78,9 @@
                         field="full_name"
                         header="Nama"
                         style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
                         <template #body="{ data }">
@@ -83,30 +91,47 @@
                                 {{ data.full_name }}
                             </Link>
                         </template>
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis nama"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="house.address"
                         header="Alamat"
                         style="min-width: 24rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis nama jalan"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="house.street.village.name"
                         header="Kelurahan"
                         style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
                         <template #filter="{ filterModel }">
-                            <Dropdown
+                            <InputText
                                 v-model="filterModel.value"
-                                :options="villages"
-                                optionLabel="name"
-                                optionValue="name"
-                                class="p-column-filter"
-                                showClear
+                                type="text"
+                                placeholder="Tulis nama kelurahan"
                             />
                         </template>
                     </Column>
@@ -115,18 +140,16 @@
                         field="house.street.district.name"
                         header="Kecamatan"
                         style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
-                        <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown
+                        <template #filter="{ filterModel }">
+                            <InputText
                                 v-model="filterModel.value"
-                                @change="filterCallback()"
-                                :options="genders"
-                                optionLabel="name"
-                                optionValue="value"
-                                class="p-column-filter"
-                                style="min-width: 10rem"
-                                :showClear="true"
+                                type="text"
+                                placeholder="Tulis nama kecamatan"
                             />
                         </template>
                     </Column>
@@ -135,16 +158,36 @@
                         field="email"
                         header="Email"
                         style="min-width: 20rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis email"
+                            />
+                        </template>
                     </Column>
 
                     <Column
                         field="phone"
                         header="Nomor HP"
                         style="min-width: 12rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #filter="{ filterModel }">
+                            <InputText
+                                v-model="filterModel.value"
+                                type="text"
+                                placeholder="Tulis no hp"
+                            />
+                        </template>
                     </Column>
 
                     <Column
@@ -159,15 +202,14 @@
                         <template #body="{ data }">
                             {{ formatGender(data.gender) }}
                         </template>
-                        <template #filter="{ filterModel, filterCallback }">
+                        <template #filter="{ filterModel }">
                             <Dropdown
                                 v-model="filterModel.value"
-                                @change="filterCallback()"
                                 :options="genders"
                                 optionLabel="name"
                                 optionValue="value"
-                                class="p-column-filter"
-                                style="min-width: 10rem"
+                                class="w-48"
+                                placeholder="Pilih jenis kelamin"
                                 :showClear="true"
                             />
                         </template>
@@ -177,25 +219,53 @@
                         field="age"
                         header="Umur"
                         style="min-width: 8rem"
-                        sortable
-                    ></Column>
-
-                    <Column
-                        field="employment.name"
-                        header="Pekerjaan"
-                        style="min-width: 22rem"
+                        :showFilterMatchModes="false"
                         sortable
                     >
-                        <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown
+                        <template #filter="{ filterModel }">
+                            <Slider
                                 v-model="filterModel.value"
-                                @change="filterCallback()"
-                                :options="genders"
+                                range
+                                class="m-4"
+                            ></Slider>
+                            <div class="flex items-center justify-between px-2">
+                                <span>
+                                    {{
+                                        filterModel.value
+                                            ? filterModel.value[0]
+                                            : 0
+                                    }}
+                                </span>
+                                <span>
+                                    {{
+                                        filterModel.value
+                                            ? filterModel.value[1]
+                                            : 100
+                                    }}
+                                </span>
+                            </div>
+                        </template>
+                    </Column>
+
+                    <Column
+                        field="employment"
+                        header="Pekerjaan"
+                        style="min-width: 22rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
+                        sortable
+                    >
+                        <template #body="{ data }">
+                            {{ data.employment?.name }}
+                        </template>
+                        <template #filter="{ filterModel }">
+                            <MultiSelect
+                                v-model="filterModel.value"
+                                :options="employments"
                                 optionLabel="name"
-                                optionValue="value"
-                                class="p-column-filter"
-                                style="min-width: 10rem"
-                                :showClear="true"
+                                placeholder="Pilih pekerjaan"
+                                class="w-48"
                             />
                         </template>
                     </Column>
@@ -204,24 +274,59 @@
                         field="is_volunteer"
                         header="Relawan"
                         style="min-width: 10rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #body="{ data }">
+                            <div v-if="data.is_volunteer">Iya</div>
+                            <div v-else>Tidak</div>
+                        </template>
+                        <template #filter="{ filterModel }">
+                            <label class="font-bold me-2"> Relawan </label>
+                            <Checkbox v-model="filterModel.value" binary />
+                        </template>
                     </Column>
 
                     <Column
                         field="is_witness"
                         header="Saksi"
                         style="min-width: 8rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #body="{ data }">
+                            <div v-if="data.is_volunteer">Iya</div>
+                            <div v-else>Tidak</div>
+                        </template>
+                        <template #filter="{ filterModel }">
+                            <label class="font-bold me-2"> Saksi </label>
+                            <Checkbox v-model="filterModel.value" binary />
+                        </template>
                     </Column>
 
                     <Column
                         field="is_deceased"
                         header="Telah Meninggal"
-                        style="min-width: 12rem"
+                        style="min-width: 15rem"
+                        :showFilterMatchModes="false"
+                        :showAddButton="false"
+                        :showFilterOperator="false"
                         sortable
                     >
+                        <template #body="{ data }">
+                            <div v-if="data.is_volunteer">Iya</div>
+                            <div v-else>Tidak</div>
+                        </template>
+                        <template #filter="{ filterModel }">
+                            <label class="font-bold me-2">
+                                Telah meninggal
+                            </label>
+                            <Checkbox v-model="filterModel.value" binary />
+                        </template>
                     </Column>
                 </DataTable>
             </div>
@@ -240,7 +345,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import Button from "primevue/button";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -252,8 +357,12 @@ import InputIcon from "primevue/inputicon";
 import { useConfirm } from "primevue/useconfirm";
 import Dropdown from "primevue/dropdown";
 import Dialog from "primevue/dialog";
+import MultiSelect from "primevue/multiselect";
+import Checkbox from "primevue/checkbox";
+import Slider from "primevue/slider";
+import { useForm } from "@inertiajs/vue3";
 
-const props = defineProps(["contacts"]);
+const props = defineProps(["contacts", "employments"]);
 
 const Form = defineAsyncComponent(() => import("../WalkLists/Form.vue"));
 
@@ -264,36 +373,27 @@ const filters = ref();
 function initFilters() {
     filters.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        full_name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        full_name: {
+            value: null,
+            matchMode: FilterMatchMode.CONTAINS,
+        },
         "house.address": {
             value: null,
-            matchMode: FilterMatchMode.STARTS_WITH,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         "house.street.village.name": {
             value: null,
-            matchMode: FilterMatchMode.STARTS_WITH,
+            matchMode: FilterMatchMode.CONTAINS,
         },
         "house.street.district.name": {
             value: null,
-            matchMode: FilterMatchMode.STARTS_WITH,
+            matchMode: FilterMatchMode.CONTAINS,
         },
-        email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        gender: {
-            operator: FilterOperator.AND,
-            constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-        },
+        email: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        gender: { value: null, matchMode: FilterMatchMode.EQUALS },
         age: { value: [0, 100], matchMode: FilterMatchMode.BETWEEN },
-
-        phone: {
-            operator: FilterOperator.AND,
-            constraints: [
-                { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            ],
-        },
-        employment: {
-            operator: FilterOperator.OR,
-            constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-        },
+        phone: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        employment: { value: null, matchMode: FilterMatchMode.IN },
         is_volunteer: { value: null, matchMode: FilterMatchMode.EQUALS },
         is_witness: { value: null, matchMode: FilterMatchMode.EQUALS },
         is_deceased: { value: null, matchMode: FilterMatchMode.EQUALS },
@@ -339,10 +439,10 @@ function remove() {
         acceptLabel: "Hapus",
         accept: () => {
             const form = useForm({
-                groups: selectedContacts.value,
+                contacts: selectedContacts.value,
             });
 
-            form.delete(route("groups.bulk-destroy"), {
+            form.delete(route("contacts.bulk-destroy"), {
                 preserveState: false,
             });
         },

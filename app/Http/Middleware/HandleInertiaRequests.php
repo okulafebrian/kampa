@@ -36,7 +36,8 @@ class HandleInertiaRequests extends Middleware
                 'user' =>  UserResource::make($request->user()),
             ] : null,
             'flash' => [
-                'success' => session('success')
+                'success' => session('success'),
+                'failed' => session('failed')
             ]
         ];
     }

@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DistrictResource;
+use App\Http\Resources\GroupResource;
 use App\Http\Resources\PollingStationResource;
 use App\Http\Resources\ProvinceResource;
 use App\Http\Resources\RegencyResource;
 use App\Http\Resources\StreetResource;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\VillageResource;
 use App\Models\District;
+use App\Models\Organization;
 use App\Models\PollingStation;
 use App\Models\Province;
 use App\Models\Regency;
@@ -65,5 +68,23 @@ class GeoController extends Controller
         }
 
         return StreetResource::collection($streets->get());
+    }
+
+    public function assignees()
+    {
+        $organization = Organization::find(auth()->user()->organization_id);
+
+        $assignees = [
+            [
+                'label' => 'Anggota',
+                'items' => UserResource::collection($organization->users)
+            ],
+            [
+                'label' => 'Grup',
+                'items' => GroupResource::collection($organization->groups)
+            ]
+        ];
+
+        return $assignees;
     }
 }

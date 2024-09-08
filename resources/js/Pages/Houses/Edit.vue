@@ -1,9 +1,9 @@
 <template>
-    <Head title="Tambah Rumah" />
+    <Head title="Edit Rumah" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="font-semibold text-2xl">Tambah Rumah</div>
+            <div class="font-semibold text-2xl">Edit Rumah</div>
         </template>
 
         <div class="p-24 pt-0 pb-16">
@@ -105,9 +105,9 @@ import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
 import InputMask from "primevue/inputmask";
 import InputText from "primevue/inputtext";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
-const props = defineProps(["provinces"]);
+const props = defineProps(["house", "provinces"]);
 
 const form = useForm({
     province_id: "",
@@ -119,6 +119,18 @@ const form = useForm({
     name: "",
     unit: "",
     neighborhood: "",
+});
+
+onMounted(() => {
+    form.province_id = props.house.street.province.id;
+    form.regency_id = props.house.street.regency.id;
+    form.district_id = props.house.street.district.id;
+    form.village_id = props.house.street.village.id;
+    form.street_id = props.house.street.id;
+    form.number = props.house.number;
+    form.name = props.house.name;
+    form.unit = props.house.unit;
+    form.neighborhood = props.house.neighborhood;
 });
 
 const regencies = ref();
@@ -181,15 +193,12 @@ watch(
             });
     }
 );
-
 function cancel() {
-    router.get(route("houses.index"));
+    router.get(route("houses.show", props.house));
 }
 
 function submit() {
-    form.post(route("houses.store"), {
-        preserveState: false,
-    });
+    form.put(route("houses.update", props.house));
 }
 </script>
 

@@ -80,7 +80,7 @@ const form = useForm({
 
 function submit() {
     form.post(route("votes.store"), {
-        onSuccess: () => emit("close"),
+        preserveState: false,
     });
 }
 </script>

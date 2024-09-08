@@ -8,7 +8,6 @@
                 <button class="bg-white px-4 py-3 rounde-lg border rounded-lg">
                     <span class="font-semibold">30 hari terakhir</span> (11 Mei
                     - 10 Jun 2024)
-                    <i class="pi pi-angle-down ms-2"></i>
                 </button>
             </div>
         </template>
@@ -125,22 +124,22 @@
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="text-gray-600">Dian Permata</div>
-                            <div class="text-gray-600 font-medium">17.07%</div>
+                            <div class="text-gray-600 font-medium">29.00%</div>
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="text-gray-600">Rizky Santoso</div>
                             <div class="text-gray-600 font-medium">0</div>
                         </div>
                         <div class="flex items-center justify-between">
-                            <div class="text-gray-600">Andi Pratama</div>
+                            <div class="text-gray-600">Gilang Ari</div>
                             <div class="text-gray-600 font-medium">0</div>
                         </div>
                         <div class="flex items-center justify-between">
-                            <div class="text-gray-600">Iriana Palastri</div>
+                            <div class="text-gray-600">Agus Prasetyo</div>
                             <div class="text-gray-600 font-medium">0</div>
                         </div>
                         <div class="flex items-center justify-between">
-                            <div class="text-gray-600">Eka Setiawan</div>
+                            <div class="text-gray-600">Maya Putri</div>
                             <div class="text-gray-600 font-medium">0</div>
                         </div>
                     </div>

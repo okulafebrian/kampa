@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\GeoController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
@@ -33,16 +34,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', UserController::class);
 
     Route::delete('groups', [GroupController::class, 'bulkDestroy'])->name('groups.bulk-destroy');
+    Route::put('{group}/assign', [GroupController::class, 'assign'])->name('groups.assign');
     Route::resource('groups', GroupController::class);
 
+    Route::delete('contacts', [ContactController::class, 'bulkDestroy'])->name('contacts.bulk-destroy');
     Route::resource('contacts', ContactController::class);
 
     Route::prefix('houses')->name('houses.')->group(function () {
-        Route::get('{house}/add-contact', [ContactController::class, 'create'])->name('add-contact');
         Route::get('bulk-create', [HouseController::class, 'bulkCreate'])->name('bulk-create');
+        Route::delete('bulk-destroy', [HouseController::class, 'bulkDestroy'])->name('bulk-destroy');
     });
     Route::resource('houses', HouseController::class);
 
+    Route::delete('streets', [StreetController::class, 'bulkDestroy'])->name('streets.bulk-destroy');
     Route::resource('streets', StreetController::class);
 
     Route::resource('walk-lists', WalkListController::class);
@@ -70,6 +74,9 @@ Route::prefix('geo')->group(function () {
     Route::post('villages/{district}', [GeoController::class, 'villages'])->name('geo.villages');
     Route::post('polling-stations/{village}', [GeoController::class, 'pollingStations'])->name('geo.polling-stations');
     Route::post('streets/{village}', [GeoController::class, 'streets'])->name('geo.streets');
+    Route::get('assignees', [GeoController::class, 'assignees'])->name('geo.assignees');
 });
+
+Route::get('attachments/download', AttachmentController::class)->name('attachments.download');
 
 require __DIR__ . '/auth.php';

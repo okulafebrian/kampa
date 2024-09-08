@@ -10,7 +10,7 @@ class WalkListController extends Controller
 {
     public function index()
     {
-        $walkLists = WalkList::where('organization_id', auth()->user()->organization_id)->get();
+        $walkLists = WalkList::with('contacts.interactions')->where('organization_id', auth()->user()->organization_id)->get();
 
         return inertia('WalkLists/Index', [
             'walkLists' => WalkListResource::collection($walkLists)
@@ -25,9 +25,9 @@ class WalkListController extends Controller
     public function store(Request $request)
     {
         $walkList = WalkList::create([
-            'name' => $request->newWalkList['name'],
-            'assigneeable_type' => 'App\Models\User',
-            'assigneeable_id' => 3,
+            'name' => $request->name,
+            'assigneeable_type' => $request->assignee['model'],
+            'assigneeable_id' => $request->assignee['id'],
             'organization_id' => auth()->user()->organization_id,
             'created_by' => auth()->user()->id
         ]);
@@ -41,7 +41,7 @@ class WalkListController extends Controller
 
     public function show(WalkList $walkList)
     {
-        //
+        return inertia('Walklist/Show')
     }
 
     public function edit(WalkList $walkList)

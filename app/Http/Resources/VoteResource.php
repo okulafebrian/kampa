@@ -16,7 +16,7 @@ class VoteResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'vote_count' => number_format($this->vote_count, 0, '.', ','),
+            'vote_count' => $this->vote_count,
             'attachment' => $this->attachment,
             'witness' => UserResource::make($this->witness),
             'creator' => UserResource::make($this->creator)

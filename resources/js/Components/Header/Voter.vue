@@ -15,17 +15,12 @@
             </template>
         </Menu>
 
-        <SplitButton
-            v-if="$page.component === 'Houses/Index'"
-            label="Tambah Rumah"
-            @click="create"
-            :model="items"
-        />
+        <slot />
     </div>
 </template>
 
 <script setup>
-import { router, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import SplitButton from "primevue/splitbutton";
@@ -52,13 +47,6 @@ const menus = [
     },
 ];
 
-const items = [
-    {
-        label: "Tambah Sekaligus",
-        command: () => {},
-    },
-];
-
 const currentMenu = computed(() => {
     switch (usePage().component) {
         case "Contacts/Index":
@@ -74,14 +62,6 @@ const currentMenu = computed(() => {
 
 function toggleMenu() {
     menu.value.toggle(event);
-}
-
-function create() {
-    router.get(route("houses.create"));
-}
-
-function bulkCreate() {
-    router.get(route("houses.bulk-create"));
 }
 </script>
 

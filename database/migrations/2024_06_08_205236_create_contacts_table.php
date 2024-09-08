@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->date('dob')->nullable();
             $table->foreignId('house_id')->constrained();
-            $table->foreignId('employment_id')->constrained();
+            $table->foreignId('employment_id')->nullable()->constrained();
             $table->foreignId('polling_station_id')->nullable()->constrained();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();

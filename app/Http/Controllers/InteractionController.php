@@ -8,16 +8,6 @@ use Illuminate\Http\Request;
 
 class InteractionController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
     public function store(InteractionRequest $request)
     {
         Interaction::create([
@@ -29,26 +19,6 @@ class InteractionController extends Controller
             'organization_id' => auth()->user()->organization_id
         ]);
 
-        return redirect()->back();
-    }
-
-    public function show(Interaction $interaction)
-    {
-        //
-    }
-
-    public function edit(Interaction $interaction)
-    {
-        //
-    }
-
-    public function update(Request $request, Interaction $interaction)
-    {
-        //
-    }
-
-    public function destroy(Interaction $interaction)
-    {
-        //
+        return redirect()->back()->with('success', 'Interaksi berhasil ditambahkan');
     }
 }

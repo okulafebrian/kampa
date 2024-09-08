@@ -37,8 +37,6 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        DB::beginTransaction();
-
         $group = Group::create([
             'name' => $request->newGroup['name'],
             'organization_id' => auth()->user()->organization_id,
@@ -51,14 +49,7 @@ class GroupController extends Controller
             ]);
         }
 
-        DB::commit();
-
-        return redirect()->route('groups.index')->with('success', 'Grup berhasil ditambahkan');
-    }
-
-    public function show(Group $group)
-    {
-        //
+        return back()->with('success', 'Grup berhasil ditambahkan');
     }
 
     public function edit(Group $group)
@@ -74,17 +65,35 @@ class GroupController extends Controller
         ]);
     }
 
-    public function update(GroupRequest $request, Group $group)
+    public function update(Request $request, Group $group)
     {
         $group->update([
+            'name' => $request->name,
             'updated_by' => auth()->user()->id
         ]);
 
+        foreach ($group->users as $user) {
+            $user->update(['group_id' => null]);
+        }
+
         foreach ($request->users as $user) {
-            $group->users()->sync($user['id']);
+            User::find($user['id'])->update([
+                'group_id' => $group->id
+            ]);
         }
 
         return redirect()->route('groups.index')->with('success', 'Grup berhasil diperbaharui');
+    }
+
+    public function assign(Request $request, Group $group)
+    {
+        foreach ($request->users as $user) {
+            User::find($user['id'])->update([
+                'group_id' => $group->id
+            ]);
+        }
+
+        return back()->with('success', 'Anggota grup berhasil ditambahkan');
     }
 
     public function destroy(Group $group)

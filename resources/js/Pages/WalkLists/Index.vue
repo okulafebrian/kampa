@@ -87,7 +87,7 @@
                     </Column>
 
                     <Column
-                        field="assignee"
+                        field="assignee.label"
                         header="Yang memiliki akses"
                         style="min-width: 15rem"
                         sortable
@@ -114,46 +114,56 @@
                         </template>
                     </Column>
 
-                    <Column column="status" style="min-width: 15rem" sortable>
+                    <Column column="totals" style="min-width: 15rem" sortable>
                         <template #header>
                             <i
                                 class="pi pi-circle-fill me-2 text-green-600"
                             ></i>
                             Terjawab
                         </template>
-                        <template #body> 4 </template>
+                        <template #body="{ data }">
+                            {{ data.totals["answered"] }}
+                        </template>
                     </Column>
 
-                    <Column column="status" style="min-width: 15rem" sortable>
+                    <Column column="totals" style="min-width: 15rem" sortable>
                         <template #header>
                             <i class="pi pi-circle-fill me-2 text-blue-600"></i>
                             Telepon Kembali
                         </template>
-                        <template #body> 2 </template>
+                        <template #body="{ data }">
+                            {{ data.totals["call back"] }}
+                        </template>
                     </Column>
 
-                    <Column column="status" style="min-width: 15rem" sortable>
+                    <Column column="totals" style="min-width: 15rem" sortable>
                         <template #header>
                             <i class="pi pi-circle-fill me-2 text-red-600"></i>
                             Tidak Tertarik
                         </template>
-                        <template #body> 1 </template>
+                        <template #body="{ data }">
+                            {{ data.totals[["inaccessible"]] }}
+                        </template>
                     </Column>
 
-                    <Column column="status" style="min-width: 15rem" sortable>
+                    <Column column="totals" style="min-width: 15rem" sortable>
                         <template #header>
                             <i class="pi pi-circle-fill me-2 text-blue-600"></i>
                             Tidak di Rumah
                         </template>
-                        <template #body> 0 </template>
+                        <template #body="{ data }">
+                            {{ data.totals["not home"] }}
+                        </template>
                     </Column>
 
-                    <Column column="status" style="min-width: 15rem" sortable>
+                    <Column column="totals" style="min-width: 15rem" sortable>
                         <template #header>
                             <i class="pi pi-circle-fill me-2 text-blue-600"></i>
                             Tidak Terjangkau
                         </template>
-                        <template #body> 0 </template>
+                        <template #body="{ data }">
+                            {{ data.totals["not interested"] }}
+                        </template>
                     </Column>
                 </DataTable>
             </div>

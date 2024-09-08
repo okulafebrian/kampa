@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('polling_station_id')->constrained();
             $table->integer('vote_count');
             $table->string('attachment');
-            $table->foreignId('witness_id')->constrained('users');
+            $table->foreignId('witness_id')->nullable()->constrained('users');
             $table->foreignId('organization_id')->constrained();
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');

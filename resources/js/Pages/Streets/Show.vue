@@ -1,10 +1,10 @@
 <template>
-    <Head :title="walklist.name" />
+    <Head :title="'Jl. ' + street.name" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <div class="font-semibold text-2xl">{{ walklist.name }}</div>
+                <div class="font-semibold text-2xl">Jl. {{ street.name }}</div>
                 <SplitButton label="Edit" @click="edit" :model="items" />
             </div>
         </template>
@@ -14,6 +14,60 @@
                 <div class="relative px-8 pt-4">
                     <TabMenu :model="menus" />
                     <hr class="absolute inset-x-0 bottom-0" />
+                </div>
+
+                <div v-if="selectedMenu === 'street'" class="space-y-6 p-8">
+                    <div>
+                        <div class="font-medium mb-1">Nama</div>
+                        <div class="text-gray-600">
+                            {{ street.name }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-medium mb-1">Kelurahan</div>
+                        <div class="text-gray-600">
+                            {{ street.village.name }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-medium mb-1">Kecamatan</div>
+                        <div class="text-gray-600">
+                            {{ street.district.name }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-medium mb-1">Kabupaten/kota</div>
+                        <div class="text-gray-600">
+                            {{ street.regency.name }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-medium mb-1">Provinsi</div>
+                        <div class="text-gray-600">
+                            {{ street.province.name }}
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="selectedMenu === 'house'" class="space-y-6 p-8">
+                    <div
+                        v-if="houses?.length > 0"
+                        class="grid grid-cols-2 gap-4"
+                    >
+                        <Link
+                            v-for="house in houses"
+                            :href="route('houses.show', house)"
+                            class="block bg-gray-50 hover:bg-gray-100 rounded-lg px-4 py-3"
+                        >
+                            <div class="font-medium">
+                                {{ house.street.name }} {{ house.number }}
+                            </div>
+                            <div class="text-sm text-gray-600">
+                                {{ house.name }}
+                            </div>
+                        </Link>
+                    </div>
+                    <div v-else class="text-gray-600">Belum ada rumah</div>
                 </div>
             </div>
 

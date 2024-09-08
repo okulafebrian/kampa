@@ -4,7 +4,7 @@
             <div class="font-medium">
                 Nama Grup <span class="text-red-600">*</span>
             </div>
-            <InputText v-model="form.newGroup.name" />
+            <InputText v-model="newForm.name" />
         </div>
 
         <Button label="Simpan" class="w-full" @click="create" />
@@ -13,9 +13,10 @@
     <div v-else class="space-y-8">
         <div class="flex flex-col gap-2">
             <Dropdown
-                v-model="form.group"
+                v-model="form.group_id"
                 :options="$page.props.groups"
                 optionLabel="name"
+                optionValue="id"
                 placeholder="Pilih grup"
             />
             <div>
@@ -29,39 +30,41 @@
             </div>
         </div>
 
-        <Button label="Simpan" class="w-full" @click="update" />
+        <Button label="Simpan" class="w-full" @click="assign" />
     </div>
 </template>
 
 <script setup>
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 const props = defineProps(["users"]);
 
-onMounted(() => {
-    router.reload({ only: ["walkLists"] });
+const newForm = useForm({
+    name: "",
+    users: props.users,
 });
 
 const form = useForm({
-    group: "",
-    newGroup: {
-        name: "",
-    },
+    group_id: "",
     users: props.users,
 });
 
 const newGroup = ref(false);
 
 function create() {
-    form.post(route("groups.store"));
+    newForm.post(route("groups.store"), {
+        preserveState: false,
+    });
 }
 
-function update() {
-    form.put(route("groups.update", form.group));
+function assign() {
+    form.put(route("groups.assign", form.group_id), {
+        preserveState: false,
+    });
 }
 </script>
 

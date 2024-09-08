@@ -25,6 +25,9 @@
                         header="Saksi"
                     ></Column>
                     <Column field="vote.vote_count" header="Jumlah suara calon">
+                        <template #body="{ data }">
+                            {{ formattedNumber(data.vote?.vote_count) }}
+                        </template>
                     </Column>
                     <Column header="Formulir C1">
                         <template #body="{ data }">
@@ -122,6 +125,10 @@ function fetchPollingStations(village) {
         });
 }
 
+function formattedNumber(number) {
+    return number ? number.toLocaleString() : null;
+}
+
 const visible1 = ref(false);
 const visible2 = ref(false);
 
@@ -136,6 +143,26 @@ function create(pollingStation) {
 function edit(pollingStation) {
     selectedPollingStation.value = pollingStation;
     visible2.value = true;
+}
+
+function download(attachment) {
+    axios
+        .get(route("attachments.download", { attachment: attachment }), {
+            responseType: "blob",
+        })
+        .then((response) => {
+            const blob = new Blob([response.data]);
+
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = attachment;
+            link.click();
+
+            window.URL.revokeObjectURL(link.href);
+        })
+        .catch((error) => {
+            console.error("Download failed:", error);
+        });
 }
 </script>
 

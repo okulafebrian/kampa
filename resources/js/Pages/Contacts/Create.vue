@@ -1,7 +1,9 @@
 <template>
     <div class="space-y-6 mb-10">
         <div class="flex flex-col gap-2">
-            <div class="font-medium">Nama Depan</div>
+            <div class="font-medium">
+                Nama Depan <span class="text-red-600">*</span>
+            </div>
             <InputText v-model="form.first_name" />
         </div>
         <div class="flex flex-col gap-2">
@@ -20,7 +22,13 @@
         </div>
         <div>
             <div class="font-medium mb-2">Tanggal Lahir</div>
-            <Calendar v-model="form.dob" dateFormat="dd M yy" />
+            <Calendar
+                v-model="form.dob"
+                dateFormat="dd M yy"
+                showIcon
+                fluid
+                iconDisplay="input"
+            />
         </div>
         <div class="flex flex-col gap-2">
             <div class="font-medium mb-1">Email</div>
@@ -34,18 +42,25 @@
             <div class="font-medium mb-2">TPS</div>
             <Dropdown
                 v-model="form.polling_station_id"
-                :options="pollingStations"
+                :options="$page.props.pollingStations"
                 optionLabel="name"
-                optionValue="value"
+                optionValue="id"
                 class="w-48"
             />
         </div>
         <div class="flex flex-col gap-2">
             <div class="font-medium">Pekerjaan</div>
-            <Dropdown v-model="form.employment" :options="employments" />
+            <Dropdown
+                v-model="form.employment_id"
+                :options="$page.props.employments"
+                optionLabel="name"
+                optionValue="id"
+            />
         </div>
         <div>
-            <div class="font-medium mb-2">Relawan</div>
+            <div class="font-medium mb-2">
+                Relawan <span class="text-red-600">*</span>
+            </div>
             <SelectButton
                 v-model="form.is_volunteer"
                 :options="booleans"
@@ -54,7 +69,9 @@
             />
         </div>
         <div>
-            <div class="font-medium mb-2">Saksi</div>
+            <div class="font-medium mb-2">
+                Saksi <span class="text-red-600">*</span>
+            </div>
             <SelectButton
                 v-model="form.is_witness"
                 :options="booleans"
@@ -63,7 +80,9 @@
             />
         </div>
         <div>
-            <div class="font-medium mb-2">Telah Meninggal</div>
+            <div class="font-medium mb-2">
+                Telah Meninggal <span class="text-red-600">*</span>
+            </div>
             <SelectButton
                 v-model="form.is_deceased"
                 :options="booleans"
@@ -73,20 +92,30 @@
         </div>
     </div>
 
-    <Button class="w-full" label="Simpan" />
+    <Button class="w-full" label="Simpan" @click="submit" />
 </template>
 
 <script setup>
-import { router, useForm } from "@inertiajs/vue3";
+import { router, useForm, usePage } from "@inertiajs/vue3";
 import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
 import SelectButton from "primevue/selectbutton";
+import { onMounted } from "vue";
 
 const props = defineProps(["contact"]);
 
+const emit = defineEmits(["close"]);
+
+onMounted(() => {
+    router.reload({ only: ["employments", "pollingStations"] });
+
+    form.house_id = usePage().props.house.id;
+});
+
 const form = useForm({
+    house_id: "",
     first_name: "",
     last_name: "",
     gender: "",
@@ -94,7 +123,7 @@ const form = useForm({
     email: "",
     phone: "",
     polling_station_id: "",
-    employment: "",
+    employment_id: "",
     is_volunteer: "",
     is_witness: "",
     is_deceased: "",
@@ -111,21 +140,6 @@ const genders = [
     },
 ];
 
-const employments = [
-    "Belum/Tidak bekerja",
-    "Aparatur/Pejabat negara",
-    "Tenaga pengajar",
-    "Wiraswasta",
-    "Pertanian/Perternakan/Perkebunan",
-    "Nelayan/Perikanan",
-    "Agama dan kepercayaan",
-    "Pelajar/Mahasiswa",
-    "Tenaga kesehatan",
-    "Pensiunan",
-    "Buruh Harian Lepas",
-    "Lainnya",
-];
-
 const booleans = [
     {
         name: "Iya",
@@ -137,12 +151,10 @@ const booleans = [
     },
 ];
 
-function cancel() {
-    router.get(route("contacts.show", props.contact));
-}
-
 function submit() {
-    router.put(route("contacts.update", props.contact));
+    form.post(route("contacts.store"), {
+        preserveState: false,
+    });
 }
 </script>
 

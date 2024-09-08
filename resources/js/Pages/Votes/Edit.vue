@@ -73,14 +73,14 @@ const emit = defineEmits(["close"]);
 
 const form = useForm({
     polling_station_id: props.pollingStation.id,
-    witness_id: "",
-    vote_count: 0,
+    witness_id: props.pollingStation.vote.witness?.id,
+    vote_count: props.pollingStation.vote.vote_count,
     attachment: "",
 });
 
 function submit() {
-    form.post(route("votes.store"), {
-        onSuccess: () => emit("close"),
+    form.put(route("votes.update", props.pollingStation.vote), {
+        preserveState: false,
     });
 }
 </script>

@@ -15,10 +15,14 @@ class WalkList extends Model
     protected $fillable = [
         'name',
         'status',
+        'assigneeable_id',
+        'assigneeable_type',
         'organization_id',
         'created_by',
         'updated_by'
     ];
+
+    protected $appends = ['totals'];
 
     public function organization(): BelongsTo
     {
@@ -38,5 +42,18 @@ class WalkList extends Model
     public function houses(): MorphToMany
     {
         return $this->morphedByMany(House::class, 'walk_listable');
+    }
+
+    public function getTotalsAttribute()
+    {
+        $interactions = $this->contacts->flatMap->interactions;
+
+        return [
+            'answered' => $interactions->where('status', 'answered')->count(),
+            'call back' => $interactions->where('status', 'call back')->count(),
+            'not interested' => $interactions->where('status', 'not interested')->count(),
+            'not home' => $interactions->where('status', 'not home')->count(),
+            'inaccessible' => $interactions->where('status', 'inaccessible')->count(),
+        ];
     }
 }

@@ -21,6 +21,10 @@ class StreetResource extends JsonResource
             'district' => DistrictResource::make($this->district),
             'regency' => RegencyResource::make($this->regency),
             'province' => ProvinceResource::make($this->province),
+            'creator' => UserResource::make($this->creator),
+            'updater' => UserResource::make($this->updater),
+            'created_at' => DateTimeResource::make($this->created_at),
+            'updated_at' => DateTimeResource::make($this->updated_at),
         ];
     }
 }

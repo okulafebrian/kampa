@@ -12,12 +12,7 @@
                     <div class="font-medium mb-2">
                         Nama Grup <span class="text-red-600">*</span>
                     </div>
-                    <InputText
-                        type="text"
-                        v-model="form.name"
-                        readonly
-                        class="w-1/3"
-                    />
+                    <InputText type="text" v-model="form.name" class="w-1/3" />
                 </div>
 
                 <div class="space-y-2">

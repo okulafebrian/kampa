@@ -78,7 +78,7 @@ class VoteController extends Controller
 
         DB::commit();
 
-        return back();
+        return back()->with('success', 'Suara berhasil disimpan');
     }
 
     public function show(District $district)
@@ -91,5 +91,28 @@ class VoteController extends Controller
             'district' => DistrictResource::make($district->load('villages')),
             'users' => Inertia::lazy(fn () => UserResource::collection($users))
         ]);
+    }
+
+    public function update(Request $request, Vote $vote)
+    {
+        $attachment = $request->attachment;
+
+        if ($request->hasFile('attachment')) {
+            $pollingStation = PollingStation::find($request->polling_station_id);
+
+            $filename =  $pollingStation->village->id . '_' . $pollingStation->name . '.' . $attachment->getClientOriginalExtension();
+
+            Storage::putFileAs('votes', $request->file('attachment'), $filename);
+        }
+
+        $vote->update([
+            'polling_station_id' => $request->polling_station_id,
+            'vote_count' => $request->vote_count,
+            'attachment' => $filename ?? $vote->attachment,
+            'witness_id' => $request->witness_id ?? null,
+            'updated_by' => auth()->user()->id
+        ]);
+
+        return back()->with('success', 'Suara berhasil diperbaharui');
     }
 }
